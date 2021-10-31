@@ -20,6 +20,26 @@ function App() {
     skills: [],
     achievements: [],
   });
+  function addExperience(){
+    let exp = resumeData.experiences
+    let lastexp = resumeData.experiences[exp.length - 1]
+    if((exp.length!==0) && (lastexp.title.length === 0 || lastexp.from.length === 0 || lastexp.to.length === 0 || lastexp.description.length === 0)){
+      alert("Please fill correct value first")
+      return
+    }
+    let experience = {
+      title: "",
+      from: "",
+      to: "",
+      description: "",
+    }
+
+    setResumeData({...resumeData, experiences: resumeData.experiences.concat(experience)});
+  }
+  function editExperience(e, i,  attribute){
+    resumeData.experiences[i][`${attribute}`] = e.target.value;
+    setResumeData({...resumeData, experiences: [...resumeData.experiences]})
+  }
   return (
     <div className="App">
       <div className="form-container">
@@ -36,27 +56,41 @@ function App() {
         />
         <input
           placeholder="Phone number"
-          type="number"
+          type="tel"
           value={resumeData.phoneNo}
         />
         <h1>Enter Experience</h1>
         {resumeData.experiences.map((experience, i) => {
           return (
-            <div className="experience" key={i}>
-              <input placeholder="Enter Job Name" value={experience.title} />
+            <div className="experience" key={i} >
+              <input placeholder="Enter Job Name" value={experience.title} 
+                onChange={(e)=>{
+                  editExperience(e, i, "title")
+                }}
+              />
               <input
                 placeholder="Enter Job Description"
                 value={experience.description}
+                onChange={(e)=>{
+                  editExperience(e, i, "description")
+                }}
               />
               <input
                 placeholder="Enter starting date"
+                onChange={(e)=>{
+                  editExperience(e, i, "from")
+                }}
                 value={experience.from}
               />
-              <input placeholder="Enter ending date" value={experience.to} />
+              <input placeholder="Enter ending date" value={experience.to} 
+              onChange={(e)=>{
+                editExperience(e, i, "to")
+              }}
+              />
             </div>
           );
         })}
-        <AddIcon onClick={() => console.log("I am working correctly")}>
+        <AddIcon onClick={() => addExperience()}>
           Add Experience
         </AddIcon>
         <h1>Enter Education</h1>
